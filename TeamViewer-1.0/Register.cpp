@@ -1,7 +1,10 @@
 #include "Register.h"
+#include "MouseMessage.h"
 #include <sstream>
 
 int Register::eventCounter=0;
+
+//comment
 
 LRESULT Register::LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -19,8 +22,10 @@ LRESULT Register::LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 		tstringstream stros;
 		stros << x<<" "<<y;
 		MessageBox(NULL, stros.str().c_str(), L"MouseCoords", MB_OK);
+		PushMessage(points);
 		Register::eventCounter++;
 	}
+	//TODO: remove!!!
 	return LRESULT();
 }
 
@@ -32,6 +37,11 @@ HHOOK Register::getHook()
 void Register::setHook(HHOOK hook)
 {
 	mainHook = hook;
+}
+
+void Register::PushMessage(MSLLHOOKSTRUCT *s)
+{
+	MouseMessage m(s->pt, s->mouseData, s->flags, s->time, s->dwExtraInfo);
 }
 
 Register::Register()
